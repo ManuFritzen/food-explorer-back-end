@@ -1,4 +1,4 @@
-const sqliteConnection = require("../../sqlite");
+const sqliteConnection = require("../sqlite");
 
 const createUsers = require('./createUsers');
 

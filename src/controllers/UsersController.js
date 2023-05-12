@@ -21,12 +21,12 @@ class UsersController {
         return response.status(201).json();
     }
 
-    async update(request, respoonse) {
+    async update(request, response) {
         const { name, email, password, old_password } = request.body;
-        const { id } = request.params;
+        const user_id = request.user.id;
 
         const database = await sqliteConnection();
-        const user = await database.get("SELET * FROM users WHERE id = (?)", [id]);
+        const user = await database.get("SELET * FROM users WHERE id = (?)", [user_id]);
 
         if(!user){
             throw new AppError("Usuário não existe!");
@@ -37,8 +37,8 @@ class UsersController {
             throw new AppError("Este e-mail ja está cadastrado.");
         }
         
-        user.name = name;
-        user.email = email;
+        user.name = name ?? user.name;
+        user.email = email ?? user.email;
 
         if(password && !old_password){
             throw new AppError("Informe a senha antiga para poder definir a senha nova.");
@@ -59,9 +59,9 @@ class UsersController {
             name = ?,
             email = ?,
             passwors = ?,
-            updated_at = ?
+            updated_at = DATETIME('now'),
             WHERE id = ?`,
-            [user.name, user.email, user.password, new Date(), id]
+            [user.name, user.email, user.password, user_id]
         );
 
         return response.status(200).json();

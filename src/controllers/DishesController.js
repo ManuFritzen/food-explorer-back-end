@@ -2,8 +2,12 @@ const knex = require('../database/knex');
 const AppError = require('../utils/AppError');
 
 class DishesController{
+    async getAll(request, response) {
+        const dishes = await knex("dishes").select("*");
+        return response.json(dishes);
+    }
     async create(request, response) {
-        const {name, description, category, price, ingredients} = request.body;
+        const {name, image, description, category, price, ingredients} = request.body;
 
         const checkDishAlreadyExistInDatabase = await knex("dishes").where({name}).first();
     
@@ -80,6 +84,18 @@ class DishesController{
         }
         return response.status(202).json('Prato atualizado com sucesso')
     }
+    async getById(request, response) {
+        const { id } = request.params;
+    
+        const dish = await knex("dishes").where({ id }).first();
+    
+        if (!dish) {
+          return response.status(404).json({ error: "Prato não encontrado" });
+        }
+    
+        return response.json(dish);
+      }
+    
 }
 
 module.exports = DishesController;

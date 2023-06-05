@@ -1,12 +1,17 @@
 require("express-async-errors");
 
+
 const migrationRun = require("./database/migrations");
 const AppError = require("./utils/AppError");
 const express = require("express");
 const routes = require("./routes");
 const cors = require("cors");
 
+const uploadImages = require('./configs/upload');
+
+
 const app = express();
+app.use("/files/dishes", express.static(uploadImages.UPLOADS_FOLDER))
 app.use(cors());
 app.use(express.json());
 

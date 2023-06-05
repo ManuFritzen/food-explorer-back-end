@@ -1,9 +1,8 @@
-const path = require('path');
-const multer = require('multer');
-const crypto = require('crypto');
+const path = require("path");
+const multer = require("multer");
+const crypto = require("crypto");
 
-const TMP_FOLDER = path.resolve(__dirname, "..", "..", "tmp");
-
+const TMP_FOLDER = path.resolve(__dirname, "..", "..");
 const UPLOADS_FOLDER = path.resolve(TMP_FOLDER, "uploads");
 
 const MULTER = {
@@ -14,13 +13,12 @@ const MULTER = {
             const fileName = `${fileHash}-${file.originalname}`;
 
             return callback(null, fileName);
-        }
+        },
     }),
 };
 
 module.exports = {
     TMP_FOLDER,
     UPLOADS_FOLDER,
-    MULTER,
+    MULTER
 }
-
